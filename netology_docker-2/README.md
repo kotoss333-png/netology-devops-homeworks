@@ -8,6 +8,22 @@
 ## Задача 1
 Создан многоэтапный `Dockerfile.python` на базе `python:3.12-slim`. Сборка и тегирование (`test-python-app:latest`) прошли успешно.
 
+**Лог успешного тестирования сборки:**
+```text
+Step 10/12 : COPY . .
+ ---> 34f3d9f4b983
+Step 11/12 : EXPOSE 5000
+ ---> Running in cfce63cb9c6b
+ ---> Removed intermediate container cfce63cb9c6b
+ ---> d59fd170c5c0
+Step 12/12 : CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]
+ ---> Running in f96d94ec6162
+ ---> Removed intermediate container f96d94ec6162
+ ---> e2ebd5b2d286
+Successfully built e2ebd5b2d286
+Successfully tagged test-python-app:latest
+```
+
 ## Задача 2
 Создан реестр `test`, образ отправлен в реестр и просканирован на уязвимости (найдено: high:44, medium:53, low:57).
 
