@@ -20,10 +20,10 @@ data "yandex_compute_image" "ubuntu" {
   family = var.vm_web_image_family
 }
 
-# Первая ВМ (web) с использованием locals и map-переменных
+# Первая ВМ (web) с использованием конфигурации из vms_resources
 resource "yandex_compute_instance" "platform" {
-  name        = local.vm_web_name_local # Использовали local переменную
-  platform_id = "standard-v2"
+  name        = local.vm_web_name_local
+  platform_id = var.vms_resources.web.platform_id
 
   resources {
     cores         = var.vms_resources.web.cores
@@ -39,21 +39,21 @@ resource "yandex_compute_instance" "platform" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = var.vms_resources.web.preemptible
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.develop.id
-    nat       = true
+    nat       = var.vms_resources.web.nat
   }
 
-  metadata = var.metadata # Использовали общую переменную метадаты
+  metadata = var.metadata
 }
 
-# Вторая ВМ (db) с использованием locals и map-переменных
+# Вторая ВМ (db) с использованием конфигурации из vms_resources
 resource "yandex_compute_instance" "db" {
-  name        = local.vm_db_name_local # Использовали local переменную
-  platform_id = "standard-v2"
+  name        = local.vm_db_name_local
+  platform_id = var.vms_resources.db.platform_id
   zone        = var.vm_db_zone
 
   resources {
@@ -70,13 +70,13 @@ resource "yandex_compute_instance" "db" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = var.vms_resources.db.preemptible
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.develop_b.id
-    nat       = true
+    nat       = var.vms_resources.db.nat
   }
 
-  metadata = var.metadata # Использовали общую переменную метадаты
+  metadata = var.metadata
 }
